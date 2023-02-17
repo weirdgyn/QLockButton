@@ -4,29 +4,54 @@
 #include <QTimer>
 #include <QWidget>
 
-#define DEF_TIMEOUT 3000
-
 class QLockButton : public QWidget {
   Q_OBJECT
 
 public:
+  constexpr static const int DEF_TIMEOUT = 3000;
+  constexpr static const int MAX_TIMEOUT = 3000;
+  constexpr static const int MIN_TIMEOUT = 500;
+
   QLockButton(QWidget *parent = 0);
 
-  Q_PROPERTY(int timeout READ timeout WRITE setTimeout RESET resetTimeout NOTIFY
-                 timeoutChanged)
-  int timeout() const;
-  void setTimeout(int timeout);
-  void resetTimeout();
+  enum class Mode { SingleShot = 0, MultiShot };
+  Q_ENUM(Mode)
+
+  QString static ModeToString(Mode mode);
+
+  Mode static StringToMode(QString mode);
+
+  enum class Status { Unlocked = 0, Locked };
+  Q_ENUM(Status)
+
+  QString static StatusToString(Status status);
+
+  Status static StringToStatus(QString status);
+
+  Q_PROPERTY(int lockTimeout READ lockTimeout WRITE setLockTimeout NOTIFY
+                 lockTimeoutChanged)
+  int lockTimeout() const;
+  void setLockTimeout(int lockTimeout);
+
+  Q_PROPERTY(int unlockTimeout READ unlockTimeout WRITE setUnlockTimeout NOTIFY
+                 unlockTimeoutChanged)
+  int unlockTimeout() const;
+  void setUnlockTimeout(int unlockTimeout);
 
   Q_PROPERTY(int borderWidth READ borderWidth WRITE setBorderWidth NOTIFY
                  borderWidthChanged)
   int borderWidth() const;
   void setBorderWidth(int borderWidth);
 
-  Q_PROPERTY(bool retriggerable READ retriggerable WRITE setRetriggerable NOTIFY
-                 retriggerableChanged)
-  bool retriggerable() const;
-  void setRetriggerable(bool retriggerable);
+  Q_PROPERTY(Status status READ status WRITE setStatus NOTIFY statusChanged)
+  Status status() const;
+  void setStatus(Status status);
+
+  Q_PROPERTY(Mode mode READ mode WRITE setMode NOTIFY modeChanged)
+  Mode mode() const;
+  void setMode(Mode mode);
+
+  void reset();
 
 protected:
   void resizeEvent(QResizeEvent *event);
@@ -36,12 +61,14 @@ protected:
   void mouseMoveEvent(QMouseEvent *event);
 
 signals:
-  void release();
-  void premature(int remainingTime);
-  void timeoutChanged();
+  void commuted(QLockButton::Status status);
+  void failed(int remainingTime);
+  void lockTimeoutChanged();
+  void unlockTimeoutChanged();
   void borderWidthChanged();
-
   void retriggerableChanged();
+  void statusChanged();
+  void modeChanged();
 
 private slots:
   void onTimerTimeout();
@@ -49,13 +76,20 @@ private slots:
 private:
   QTimer mTimer;
   QRectF mFrame;
-  int mTimeout;
+  int mLockTimeout;
+  int mUnlockTimeout;
   bool mPressed;
+  bool mTriggered;
   int mBorderWidth;
-  bool mRetriggerable;
+  Status mStatus;
+  Mode mMode;
 
   QRectF getFrame();
   void resize();
+  void commute();
+  void drawBackground(QPainter &painter);
+  void drawLockGlyph(QPainter &painter);
+  void drawUnlockGlyph(QPainter &painter);
 };
 
 #endif // QLOCKBUTTON_H
