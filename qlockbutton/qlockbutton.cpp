@@ -25,9 +25,7 @@ QLockButton::QLockButton(QWidget *parent)
   mLockGlyph = new QImage(":/images/lock.svg");
   mUnlockGlyph = new QImage(":/images/unlock.svg");
 
-  mFillGradient.setAngle(90);
-  mFillGradient.setColorAt(1, mFillStartColor);
-  mFillGradient.setColorAt(0, mFillEndColor);
+  setFillGradient();
 }
 
 QLockButton::~QLockButton() {
@@ -167,6 +165,28 @@ void QLockButton::onTimerTimeout() {
 
 void QLockButton::onFillTimerTimeout() { repaint(); }
 
+QColor QLockButton::fillEndColor() const { return mFillEndColor; }
+
+void QLockButton::setFillEndColor(const QColor &fillEndColor) {
+  if (mFillEndColor == fillEndColor)
+    return;
+  mFillEndColor = fillEndColor;
+  emit fillEndColorChanged();
+  repaint();
+  resize();
+}
+
+QColor QLockButton::fillStartColor() const { return mFillStartColor; }
+
+void QLockButton::setFillStartColor(const QColor &fillStartColor) {
+  if (mFillStartColor == fillStartColor)
+    return;
+  mFillStartColor = fillStartColor;
+  emit fillStartColorChanged();
+  repaint();
+  resize();
+}
+
 QColor QLockButton::borderColor() const { return mBorderColor; }
 
 void QLockButton::setBorderColor(const QColor &borderColor) {
@@ -287,7 +307,7 @@ void QLockButton::resize() {
   mGlyphFrame = getGlyphFrame();
   mFillFrame = getFillFrame();
 
-  mFillGradient.setCenter(mFrame.center());
+  setFillGradient();
 }
 
 int QLockButton::fillAngle() {
@@ -306,6 +326,14 @@ int QLockButton::fillAngle() {
   _angle *= 16;
 
   return (int)_angle;
+}
+
+void QLockButton::setFillGradient() {
+    mFillGradient.setCenter(mFrame.center());
+
+    mFillGradient.setAngle(90);
+    mFillGradient.setColorAt(1, mFillStartColor);
+    mFillGradient.setColorAt(0, mFillEndColor);
 }
 
 void QLockButton::changeStatus() {

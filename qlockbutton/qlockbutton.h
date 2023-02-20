@@ -74,6 +74,14 @@ public:
   QColor borderColor() const;
   void setBorderColor(const QColor &borderColor);
 
+  Q_PROPERTY(QColor fillStartColor READ fillStartColor WRITE setFillStartColor NOTIFY fillStartColorChanged)
+  QColor fillStartColor() const;
+  void setFillStartColor(const QColor &fillStartColor);
+
+  Q_PROPERTY(QColor fillEndColor READ fillEndColor WRITE setFillEndColor NOTIFY fillEndColorChanged)
+  QColor fillEndColor() const;
+  void setFillEndColor(const QColor &fillEndColor);
+
 protected:
   void resizeEvent(QResizeEvent *event);
   void paintEvent(QPaintEvent *event);
@@ -93,6 +101,8 @@ signals:
   void innerColorChanged();
   void backgroundColorChanged();
   void borderColorChanged();
+  void fillStartColorChanged();
+  void fillEndColorChanged();
 
 private slots:
   void onTimerTimeout();
@@ -134,6 +144,7 @@ private:
   void drawUnlockGlyph(QPainter &painter);
   void drawFill(QPainter &painter);
   int fillAngle();
+  void setFillGradient();
 };
 
 #endif // QLOCKBUTTON_H
