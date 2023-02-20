@@ -32,7 +32,7 @@ There are also a number of static constants made public for reference use:
 - ```DEF_GLYPH_RATIO```  (lock/unlock glyph size ratio)
 - ```DEF_TIMEOUT```  (default timeout for both Locking and Unlocking)
 - ```MAX_TIMEOUT``` (maximum timeout value)
-- ```MIN_TIMEOUT``` (minmimum timeout value)
+- ```MIN_TIMEOUT``` (minimum timeout value)
 - ```DEF_UPDATE_TIMEOUT``` (this is update time in milliseconds of the fill effect)
 
 If you are guessing how this widget may look like:
