@@ -1,6 +1,7 @@
 <RCC>
-    <qresource prefix="/" >
+    <qresource prefix="/">
         <file>images/lockbutton.ico</file>
-
+        <file>images/lock.svg</file>
+        <file>images/unlock.svg</file>
     </qresource>
 </RCC>

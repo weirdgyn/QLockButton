@@ -8,11 +8,15 @@ class QLockButton : public QWidget {
   Q_OBJECT
 
 public:
+  constexpr static const float DEF_INNER_RATIO = 0.8f;
+  constexpr static const float DEF_GLYPH_RATIO = 0.8f;
   constexpr static const int DEF_TIMEOUT = 3000;
   constexpr static const int MAX_TIMEOUT = 3000;
   constexpr static const int MIN_TIMEOUT = 500;
+  constexpr static const int DEF_UPDATE_TIMEOUT = 50;
 
   QLockButton(QWidget *parent = 0);
+  ~QLockButton();
 
   enum class Mode { SingleShot = 0, MultiShot };
   Q_ENUM(Mode)
@@ -53,6 +57,21 @@ public:
 
   void reset();
 
+  Q_PROPERTY(QColor innerColor READ innerColor WRITE setInnerColor NOTIFY
+                 innerColorChanged)
+  QColor innerColor() const;
+  void setInnerColor(const QColor &innerColor);
+
+  Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE
+                 setBackgroundColor NOTIFY backgroundColorChanged)
+  QColor backgroundColor() const;
+  void setBackgroundColor(const QColor &backgroundColor);
+
+  Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY
+                 borderColorChanged)
+  QColor borderColor() const;
+  void setBorderColor(const QColor &borderColor);
+
 protected:
   void resizeEvent(QResizeEvent *event);
   void paintEvent(QPaintEvent *event);
@@ -61,21 +80,29 @@ protected:
   void mouseMoveEvent(QMouseEvent *event);
 
 signals:
-  void commuted(QLockButton::Status status);
-  void failed(int remainingTime);
+  void success(QLockButton::Status status);
+  void fail(int remainingTime);
   void lockTimeoutChanged();
   void unlockTimeoutChanged();
   void borderWidthChanged();
   void retriggerableChanged();
   void statusChanged();
   void modeChanged();
+  void innerColorChanged();
+  void backgroundColorChanged();
+  void borderColorChanged();
 
 private slots:
   void onTimerTimeout();
+  void onFillTimerTimeout();
 
 private:
   QTimer mTimer;
+  QTimer mFillTimer;
   QRectF mFrame;
+  QRectF mInnerFrame;
+  QRectF mGlyphFrame;
+  QRectF mFillFrame;
   int mLockTimeout;
   int mUnlockTimeout;
   bool mPressed;
@@ -83,13 +110,26 @@ private:
   int mBorderWidth;
   Status mStatus;
   Mode mMode;
+  QImage *mLockGlyph;
+  QImage *mUnlockGlyph;
+  QColor mBackgroundColor;
+  QColor mInnerColor;
+  QColor mBorderColor;
+  QConicalGradient mFillGradient;
+  float mFillWidth;
 
   QRectF getFrame();
+  QRectF getInnerFrame();
+  QRectF getGlyphFrame();
+  QRectF getFillFrame();
+
   void resize();
-  void commute();
+  void changeStatus();
   void drawBackground(QPainter &painter);
   void drawLockGlyph(QPainter &painter);
   void drawUnlockGlyph(QPainter &painter);
+  void drawFill(QPainter &painter);
+  int fillAngle();
 };
 
 #endif // QLOCKBUTTON_H

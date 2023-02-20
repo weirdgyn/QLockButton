@@ -41,7 +41,7 @@ QString QLockButtonPlugin::group() const
 
 QIcon QLockButtonPlugin::icon() const
 {
-    return QIcon(QLatin1String(":/lockbutton.ico"));
+    return QIcon(QLatin1String(":/images/lockbutton.ico"));
 }
 
 QString QLockButtonPlugin::toolTip() const
@@ -61,12 +61,29 @@ bool QLockButtonPlugin::isContainer() const
 
 QString QLockButtonPlugin::domXml() const
 {
-    return QLatin1String("<widget class=\"QLockButton\" name=\"qLockButton\">\n</widget>\n");
+    return "<ui language=\"c++\" displayname=\"Lock Button\">\n"
+           " <widget class=\"QLockButton\" name=\"lockButton\">\n"
+           "  <property name=\"geometry\">\n"
+           "   <rect>\n"
+           "    <x>0</x>\n"
+           "    <y>0</y>\n"
+           "    <width>300</width>\n"
+           "    <height>300</height>\n"
+           "   </rect>\n"
+           "  </property>\n"
+           "  <property name=\"toolTip\" >\n"
+           "   <string>Lock/unlock button</string>\n"
+           "  </property>\n"
+           "  <property name=\"whatsThis\" >\n"
+           "   <string>A button with lock/unlock behaviour.</string>\n"
+           "  </property>\n"
+           " </widget>\n"
+           "</ui>\n";
 }
 
 QString QLockButtonPlugin::includeFile() const
 {
-    return QLatin1String("qlockbutton/qlockbutton.h");
+    return QStringLiteral("qlockbutton/qlockbutton.h");
 }
 #if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN2(qlockbuttonplugin, QLockButtonPlugin)

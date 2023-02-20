@@ -6,21 +6,32 @@
 #include <QRectF>
 #include <QtMath>
 
-QLockButton::QLockButton(QWidget *parent) : QWidget(parent) {
+QLockButton::QLockButton(QWidget *parent)
+    : QWidget(parent), mLockTimeout(DEF_TIMEOUT), mUnlockTimeout(DEF_TIMEOUT),
+      mPressed(false), mTriggered(false), mBorderWidth(1),
+      mStatus(Status::Unlocked), mMode(Mode::MultiShot),
+      mBackgroundColor(Qt::white), mInnerColor(Qt::blue),
+      mBorderColor(Qt::black) {
   setMouseTracking(true);
   setAutoFillBackground(true);
 
-  mStatus = Status::Unlocked;
-  mMode = Mode::MultiShot;
-
-  mLockTimeout = DEF_TIMEOUT;
-  mUnlockTimeout = DEF_TIMEOUT;
-  mPressed = false;
-  mTriggered = false;
-  mBorderWidth = 1;
-
   mTimer.setInterval(DEF_TIMEOUT);
+  mFillTimer.setInterval(DEF_UPDATE_TIMEOUT);
   connect(&mTimer, &QTimer::timeout, this, &QLockButton::onTimerTimeout);
+  connect(&mFillTimer, &QTimer::timeout, this,
+          &QLockButton::onFillTimerTimeout);
+
+  mLockGlyph = new QImage(":/images/lock.svg");
+  mUnlockGlyph = new QImage(":/images/unlock.svg");
+
+  mFillGradient.setAngle(90);
+  mFillGradient.setColorAt(1, mBackgroundColor);
+  mFillGradient.setColorAt(0, mInnerColor);
+}
+
+QLockButton::~QLockButton() {
+  delete mLockGlyph;
+  delete mUnlockGlyph;
 }
 
 QString QLockButton::ModeToString(Mode mode) {
@@ -69,9 +80,19 @@ void QLockButton::paintEvent(QPaintEvent *event) {
 
   QPainter painter(this);
 
+  QPen _pen(Qt::black);
+  _pen.setWidth(mBorderWidth);
+  _pen.setColor(mBorderColor);
+
+  painter.setPen(_pen);
+
   painter.setRenderHint(QPainter::Antialiasing, true);
+  painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
   drawBackground(painter);
+
+  if (mPressed)
+    drawFill(painter);
 
   if (mStatus == Status::Locked)
     drawLockGlyph(painter);
@@ -85,13 +106,15 @@ void QLockButton::mousePressEvent(QMouseEvent *event) {
   float _distance = qSqrt(qPow(event->pos().x() - mFrame.center().x(), 2) +
                           qPow(event->pos().y() - mFrame.center().y(), 2));
 
-  if(_distance > mFrame.width()/2)
-      return;
+  if (_distance > mFrame.width() / 2)
+    return;
 
   mPressed = true;
 
   if (mTriggered == true && mMode == Mode::SingleShot)
     return;
+
+  mFillTimer.start();
 
   if (mStatus == Status::Locked)
     mTimer.start(mUnlockTimeout);
@@ -104,12 +127,17 @@ void QLockButton::mouseReleaseEvent(QMouseEvent *event) {
 
   mPressed = false;
 
+  if (mFillTimer.isActive()) {
+    mFillTimer.stop();
+    repaint();
+  }
+
   if (mTimer.isActive()) {
     int _time = mTimer.remainingTime();
 
     mTimer.stop();
 
-    emit failed(_time);
+    emit fail(_time);
   }
 }
 
@@ -132,8 +160,46 @@ void QLockButton::setLockTimeout(int lockTimeout) {
 void QLockButton::onTimerTimeout() {
   if (mPressed) {
     mTimer.stop();
-    commute();
+    changeStatus();
   }
+}
+
+void QLockButton::onFillTimerTimeout() { repaint(); }
+
+QColor QLockButton::borderColor() const { return mBorderColor; }
+
+void QLockButton::setBorderColor(const QColor &borderColor) {
+  if (mBorderColor == borderColor)
+    return;
+  mBorderColor = borderColor;
+  emit borderColorChanged();
+  repaint();
+}
+
+QColor QLockButton::backgroundColor() const { return mBackgroundColor; }
+
+void QLockButton::setBackgroundColor(const QColor &backgroundColor) {
+  if (mBackgroundColor == backgroundColor)
+    return;
+
+  mBackgroundColor = backgroundColor;
+  mFillGradient.setColorAt(1, mBackgroundColor);
+
+  emit backgroundColorChanged();
+  repaint();
+}
+
+QColor QLockButton::innerColor() const { return mInnerColor; }
+
+void QLockButton::setInnerColor(const QColor &innerColor) {
+  if (mInnerColor == innerColor)
+    return;
+
+  mInnerColor = innerColor;
+  mFillGradient.setColorAt(0, mInnerColor);
+
+  emit innerColorChanged();
+  repaint();
 }
 
 int QLockButton::unlockTimeout() const { return mUnlockTimeout; }
@@ -204,9 +270,44 @@ QRectF QLockButton::getFrame() {
   return _frame;
 }
 
-void QLockButton::resize() { mFrame = getFrame(); }
+QRectF QLockButton::getInnerFrame() {
+  QRectF _frame = QRectF();
 
-void QLockButton::commute() {
+  _frame.setWidth(mFrame.width() * DEF_INNER_RATIO);
+  _frame.setHeight(mFrame.height() * DEF_INNER_RATIO);
+  _frame.moveCenter(mFrame.center());
+
+  return _frame;
+}
+
+void QLockButton::resize() {
+  mFrame = getFrame();
+  mInnerFrame = getInnerFrame();
+  mGlyphFrame = getGlyphFrame();
+  mFillFrame = getFillFrame();
+
+  mFillGradient.setCenter(mFrame.center());
+}
+
+int QLockButton::fillAngle() {
+  float _ratio = 0;
+
+  _ratio = 1 - ((float)mTimer.remainingTime() / (float)mTimer.interval());
+
+  if (_ratio < 0)
+    _ratio = 0;
+  else if (_ratio > 1)
+    _ratio = 1;
+
+  float _angle = 0;
+
+  _angle = _ratio * 360;
+  _angle *= 16;
+
+  return (int)_angle;
+}
+
+void QLockButton::changeStatus() {
   mTriggered = true;
 
   if (mStatus == Status::Locked)
@@ -214,18 +315,69 @@ void QLockButton::commute() {
   else
     mStatus = Status::Locked;
 
-  emit commuted(mStatus);
+  repaint();
+
+  emit success(mStatus);
 }
 
 void QLockButton::drawBackground(QPainter &painter) {
-  QPen _pen(Qt::black);
-  _pen.setWidth(mBorderWidth);
+  QBrush _brush(mBackgroundColor);
+
+  painter.setBrush(_brush);
+
+  painter.drawEllipse(mFrame);
+
+  QBrush _inner_brush(mInnerColor);
+
+  painter.setBrush(_inner_brush);
+
+  painter.drawEllipse(mInnerFrame);
+}
+
+QRectF QLockButton::getGlyphFrame() {
+  QRectF _frame = QRectF();
+
+  _frame.setWidth(mFrame.width() * DEF_INNER_RATIO * DEF_GLYPH_RATIO);
+  _frame.setHeight(mFrame.height() * DEF_INNER_RATIO * DEF_GLYPH_RATIO);
+  _frame.moveCenter(mFrame.center());
+
+  return _frame;
+}
+
+QRectF QLockButton::getFillFrame() {
+  float _width = (mFrame.width() + mInnerFrame.width()) / 2;
+  float _height = (mFrame.height() + mInnerFrame.height()) / 2;
+
+  float _gap = (mFrame.width() - mInnerFrame.width())/2 - mBorderWidth/2;
+
+  mFillWidth = _gap;
+
+  QRectF _frame;
+
+  _frame.setWidth(_width);
+  _frame.setHeight(_height);
+
+  _frame.moveCenter(mFrame.center());
+
+  return _frame;
+}
+
+void QLockButton::drawLockGlyph(QPainter &painter) {
+  painter.drawImage(mGlyphFrame, *mLockGlyph);
+}
+
+void QLockButton::drawUnlockGlyph(QPainter &painter) {
+  painter.drawImage(mGlyphFrame, *mUnlockGlyph);
+}
+
+void QLockButton::drawFill(QPainter &painter) {
+  QPen _pen(QBrush(mFillGradient), mFillWidth);
+
+  //_pen.setCapStyle(Qt::RoundCap);
 
   painter.setPen(_pen);
 
-  painter.drawEllipse(mFrame);
+  float _angle = fillAngle();
+
+  painter.drawArc(mFillFrame, 90 * 16, _angle);
 }
-
-void QLockButton::drawLockGlyph(QPainter &painter) { Q_UNUSED(painter) }
-
-void QLockButton::drawUnlockGlyph(QPainter &painter) { Q_UNUSED(painter) }
