@@ -47,6 +47,7 @@ This is the widget running in its associated Qt application.
 - Translation
 - Docs (doxygen)
 - Add support for stylesheets
+- Improve lock/unlock glyph rendering quality
 - More features...
 
 ## References
