@@ -11,7 +11,8 @@ QLockButton::QLockButton(QWidget *parent)
       mPressed(false), mTriggered(false), mBorderWidth(1),
       mStatus(Status::Unlocked), mMode(Mode::MultiShot),
       mBackgroundColor(Qt::white), mInnerColor(Qt::blue),
-      mBorderColor(Qt::black) {
+      mBorderColor(Qt::black), mFillStartColor(Qt::red),
+      mFillEndColor(Qt::white) {
   setMouseTracking(true);
   setAutoFillBackground(true);
 
@@ -25,8 +26,8 @@ QLockButton::QLockButton(QWidget *parent)
   mUnlockGlyph = new QImage(":/images/unlock.svg");
 
   mFillGradient.setAngle(90);
-  mFillGradient.setColorAt(1, mBackgroundColor);
-  mFillGradient.setColorAt(0, mInnerColor);
+  mFillGradient.setColorAt(1, mFillStartColor);
+  mFillGradient.setColorAt(0, mFillEndColor);
 }
 
 QLockButton::~QLockButton() {
@@ -348,7 +349,7 @@ QRectF QLockButton::getFillFrame() {
   float _width = (mFrame.width() + mInnerFrame.width()) / 2;
   float _height = (mFrame.height() + mInnerFrame.height()) / 2;
 
-  float _gap = (mFrame.width() - mInnerFrame.width())/2 - mBorderWidth/2;
+  float _gap = (mFrame.width() - mInnerFrame.width()) / 2 - mBorderWidth / 2;
 
   mFillWidth = _gap;
 
@@ -372,12 +373,8 @@ void QLockButton::drawUnlockGlyph(QPainter &painter) {
 
 void QLockButton::drawFill(QPainter &painter) {
   QPen _pen(QBrush(mFillGradient), mFillWidth);
-
-  //_pen.setCapStyle(Qt::RoundCap);
-
+  _pen.setCapStyle(Qt::FlatCap);
   painter.setPen(_pen);
 
-  float _angle = fillAngle();
-
-  painter.drawArc(mFillFrame, 90 * 16, _angle);
+  painter.drawArc(mFillFrame, (90 + FIX_GRADIENT_START) * 16, fillAngle());
 }

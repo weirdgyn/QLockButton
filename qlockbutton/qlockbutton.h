@@ -4,6 +4,8 @@
 #include <QTimer>
 #include <QWidget>
 
+#define FIX_GRADIENT_START 1
+
 class QLockButton : public QWidget {
   Q_OBJECT
 
@@ -117,6 +119,8 @@ private:
   QColor mBorderColor;
   QConicalGradient mFillGradient;
   float mFillWidth;
+  QColor mFillStartColor;
+  QColor mFillEndColor;
 
   QRectF getFrame();
   QRectF getInnerFrame();
