@@ -43,6 +43,7 @@ This is the widget running in its associated Qt application.
 
 ## TODO
 - Distribute as library/plugin
+- Reverse fill direction (CW instead CCW)
 - Translation
 - Docs (doxygen)
 - Add support for stylesheets
