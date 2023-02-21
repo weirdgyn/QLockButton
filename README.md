@@ -26,6 +26,8 @@ For the sake of documentation this is a complete list of ```QLockButton``` widge
 - ```int UnlockTimeout```: is the time needed to get to Unlocked status in milliseconds (default: ```3000```).
 - ```Mode mode```: this property tells if the widget can be switched many times (```MultiShot```, default) or just one (```SingleShot```)
 - ```State state```: this property read/set the internal status. You can choose between none (```Unlocked```, default) or (```Locked```).
+- ```QColor fillEndColor```: is the color of the end of the fill effect gradient (default ```Qt::white```).
+- ```QColor fillStartColor```: is the color of the start of the fill effect gradient (default ```Qt::red```).
 
 There are also a number of static constants made public for reference use:
 - ```DEF_INNER_RATIO```  (actuator size ratio)
