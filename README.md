@@ -1,5 +1,7 @@
 # QLockButton
-QLockButton is a Qt 5 widget that implements an interactive lock button. The widget contains a timer that is activated when the user press inside the button area, if the user keep the button pressed for at given time the button change its state. This widget can be used to _secure_ some action that you don't want to be activated by a random click. The widget provide also a visual indicator of the time needed to fullfill the status change trough a progressive fill effect of the outer rim.
+QLockButton is a Qt 5 widget that implements an interactive lock button. The widget contains a timer that is activated when the user press inside the button area, if the user keep the button pressed for at given time the button change its state. 
+
+This widget can be used to _secure_ some action/feature that you don't want to be activated by a random click. The widget provide also a visual indicator of the time needed to fullfill the status change trough a progressive fill effect of the outer rim.
 
 To use this widget you should download the source code of this repository and then you can opt between:
 - use the class code directly adding  ```qlockbutton.h ```,  ```qlockbutton.cpp ``` files to your code;
