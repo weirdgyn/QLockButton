@@ -1,11 +1,11 @@
 # QLockButton
-QLockButton is a Qt 5 widget that implements an interactive lock button. The button itself is a timer that activates when the user press the button, if the user keep the button pressed for at given time the button change its state. This widget can be used to _secure_ some action that you don't want to be activated by a random click. The widget provided a visual indicator of the time needed to fullfill the status change.
+QLockButton is a Qt 5 widget that implements an interactive lock button. The button object itself contains a timer that is activated when the user press the button, if the user keep the button pressed for at given time the button change its state. This widget can be used to _secure_ some action that you don't want to be activated by a random click. The widget provide also a visual indicator of the time needed to fullfill the status change trough a progressive fill effect of the outer rim.
 
 To use this widget you should download the source code of this repository and then you can opt between:
 - use the class code directly adding  ```qlockbutton.h ```,  ```qlockbutton.cpp ``` files to your code;
 - include the class folder adding a  ```include(qlockbutton/qlockbutton.pri) ``` directive to your  ```.pro ``` file.
 
-Optionally you can compile the main project file to enhance the visual integration experience (load  ```LockButton.pro ``` file).
+Optionally you can compile the main project file to enhance the visual integration experience (loading and building  ```LockButton.pro ``` file).
 
 If you have installed succesfully the plugin you can enjoy the full user experience as you can drop QLockButton into your form straight form the pallette in QtCreator (or QtDesigner), there you can manage properties as any other widget.
 If you are using QLockButton trough source code then you can add the widget to the UI programatically or *promoting* a widget _placeholder_ to ```QLockButton``` class (referencing the correct header: ```qlockbutton.h``` of course).
@@ -26,6 +26,8 @@ For the sake of documentation this is a complete list of ```QLockButton``` widge
 - ```int UnlockTimeout```: is the time needed to get to Unlocked status in milliseconds (default: ```3000```).
 - ```Mode mode```: this property tells if the widget can be switched many times (```MultiShot```, default) or just one (```SingleShot```)
 - ```State state```: this property read/set the internal status. You can choose between none (```Unlocked```, default) or (```Locked```).
+- ```QColor fillStartColor```: is the color of the start of the fill effect gradient (default ```Qt::white```).
+- ```QColor fillEndColor```: is the color of the end of the fill effect gradient (default ```Qt::red```).
 
 There are also a number of static constants made public for reference use:
 - ```DEF_INNER_RATIO```  (actuator size ratio)
@@ -51,7 +53,8 @@ This is the widget running in its associated Qt application.
 - More features...
 
 ## References
-[Qt framework](http://qt.io)
+- [Qt framework](http://qt.io)
+- [Google Material Icons](https://fonts.google.com/icons) : lock/unlock icon.
 
 ## License
 Copyright 2023 Michele Santucci.
