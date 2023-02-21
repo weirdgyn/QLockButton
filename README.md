@@ -10,7 +10,7 @@ To use this widget you should download the source code of this repository and th
 Optionally you can compile the main project file to enhance the visual integration experience (loading and building  ```LockButton.pro ``` file).
 
 If you have installed succesfully the plugin you can enjoy the full user experience as you can drop QLockButton into your form straight form the pallette in QtCreator (or QtDesigner), there you can manage properties as any other widget.
-If you are using QLockButton trough source code then you can add the widget to the UI programatically or *promoting* a widget _placeholder_ to ```QLockButton``` class (referencing the correct header: ```qlockbutton.h``` of course).
+If you are using QLockButton trough source code then you can add the widget to the UI programatically or *promoting* a widget _placeholder_ to ```QLockButton``` class (referencing its header: ```qlockbutton.h``` of course).
 You don't need to make the _placeholder_ square since ```QLockButton``` is beend designed to always _use_ a square footprint (inside assigned widget area).
 To be notified of user interactions connect to the ```success``` and/or ```fail``` signals.
 Every successul attempt to change the state of the button (i.e. keeping the button pressed for the time needed) is notified trough ```success``` signal along with the state reached by the button (```Locked```cor ```Unlocked```). If the user fails then the corresponding signal is fired (it will also report the missing time to a successfull state switch).
