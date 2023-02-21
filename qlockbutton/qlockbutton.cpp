@@ -12,8 +12,8 @@ QLockButton::QLockButton(QWidget *parent)
       mPressed(false), mTriggered(false), mBorderWidth(1),
       mStatus(Status::Unlocked), mMode(Mode::MultiShot),
       mBackgroundColor(Qt::white), mInnerColor(Qt::blue),
-      mBorderColor(Qt::black), mFillStartColor(Qt::red),
-      mFillEndColor(Qt::white) {
+      mBorderColor(Qt::black), mFillStartColor(Qt::white),
+      mFillEndColor(Qt::red) {
   setMouseTracking(true);
   setAutoFillBackground(true);
 
@@ -334,8 +334,8 @@ void QLockButton::setFillGradient() {
   mFillGradient.setCenter(mFrame.center());
 
   mFillGradient.setAngle(90);
-  mFillGradient.setColorAt(1, mFillStartColor);
-  mFillGradient.setColorAt(0, mFillEndColor);
+  mFillGradient.setColorAt(1, mFillEndColor);
+  mFillGradient.setColorAt(0, mFillStartColor);
 }
 
 void QLockButton::changeStatus() {
@@ -381,7 +381,7 @@ QRectF QLockButton::getFillFrame() {
 
   float _gap = (mFrame.width() - mInnerFrame.width()) / 2 - mBorderWidth / 2;
 
-  mFillWidth = _gap-1;
+  mFillWidth = _gap - 1;
 
   QRectF _frame;
 
@@ -393,7 +393,7 @@ QRectF QLockButton::getFillFrame() {
   return _frame;
 }
 
-void QLockButton::drawLockGlyph(QPainter &painter) {   
+void QLockButton::drawLockGlyph(QPainter &painter) {
   mLockRenderer->render(&painter, mGlyphFrame);
 }
 
