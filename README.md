@@ -51,8 +51,8 @@ This is the widget running in its associated Qt application.
 - More features...
 
 ## References
-[Qt framework](http://qt.io)
-[Google Material Icons](https://fonts.google.com/icons)
+- [Qt framework](http://qt.io)
+- [Google Material Icons](https://fonts.google.com/icons)
 
 ## License
 Copyright 2023 Michele Santucci.
