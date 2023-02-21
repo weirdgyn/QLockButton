@@ -49,7 +49,7 @@ This is the widget running in its associated Qt application.
 - Distribute as library/plugin
 - Reverse fill direction (CW instead CCW)
 - Translation
-- Docs (doxygen)
+- ~~Docs (doxygen)~~
 - Add support for stylesheets
 - ~~Improve lock/unlock glyph rendering quality~~
 - More features...
