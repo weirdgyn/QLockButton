@@ -381,7 +381,7 @@ QRectF QLockButton::getFillFrame() {
 
   float _gap = (mFrame.width() - mInnerFrame.width()) / 2 - mBorderWidth / 2;
 
-  mFillWidth = _gap;
+  mFillWidth = _gap-1;
 
   QRectF _frame;
 
@@ -393,7 +393,7 @@ QRectF QLockButton::getFillFrame() {
   return _frame;
 }
 
-void QLockButton::drawLockGlyph(QPainter &painter) {
+void QLockButton::drawLockGlyph(QPainter &painter) {   
   mLockRenderer->render(&painter, mGlyphFrame);
 }
 
