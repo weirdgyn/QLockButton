@@ -54,7 +54,7 @@ This is the widget running in its associated Qt application.
 
 ## References
 - [Qt framework](http://qt.io)
-- [Google Material Icons](https://fonts.google.com/icons)
+- [Google Material Icons](https://fonts.google.com/icons) : lock/unlock icon.
 
 ## License
 Copyright 2023 Michele Santucci.
