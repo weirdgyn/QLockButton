@@ -21,11 +21,11 @@ You can find an example of the code needed to use this widget in the associated 
 For the sake of documentation this is a complete list of ```QLockButton``` widget properties and their usage:
 
 - ```QColor backgroundColor```: is the main color of the background (default: ```Qt::white```).
-- ```QColor innerColor```: is the main color of the button actuator (default: ```Qt::blue```).
-- ```QColor borderColor```: is the color of the external border of both background and pad area (default: ```Qt::black```).
+- ```QColor innerColor```: is the main color of the button _actuator_ (default: ```Qt::blue```).
+- ```QColor borderColor```: is the color of the external border of both background and _actuator_ area (default: ```Qt::black```).
 - ```int borderWidth```: is the thickness of border (default: ```1```).
-- ```int lockTimeout```: is the time needed to get to Locked status in milliseconds (default: ```3000```).
-- ```int UnlockTimeout```: is the time needed to get to Unlocked status in milliseconds (default: ```3000```).
+- ```int lockTimeout```: is the time needed to get to ```Locked``` status in milliseconds (default: ```3000```).
+- ```int UnlockTimeout```: is the time needed to get to ```Unlocked``` status in milliseconds (default: ```3000```).
 - ```Mode mode```: this property tells if the widget can be switched many times (```MultiShot```, default) or just one (```SingleShot```)
 - ```State state```: this property read/set the internal status. You can choose between none (```Unlocked```, default) or (```Locked```).
 - ```QColor fillStartColor```: is the color of the start of the fill effect gradient (default ```Qt::white```).
