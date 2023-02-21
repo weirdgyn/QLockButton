@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QWidget>
+#include <QSvgRenderer>
 
 #define FIX_GRADIENT_START 1
 
@@ -122,8 +123,8 @@ private:
   int mBorderWidth;
   Status mStatus;
   Mode mMode;
-  QImage *mLockGlyph;
-  QImage *mUnlockGlyph;
+  QSvgRenderer *mLockRenderer;
+  QSvgRenderer *mUnlockRenderer;
   QColor mBackgroundColor;
   QColor mInnerColor;
   QColor mBorderColor;

@@ -1,7 +1,7 @@
 #ifndef QLOCKBUTTONPLUGIN_H
 #define QLOCKBUTTONPLUGIN_H
 
-#include <QDesignerCustomWidgetInterface>
+#include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class QLockButtonPlugin : public QObject, public QDesignerCustomWidgetInterface
 {

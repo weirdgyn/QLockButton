@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QRectF>
+#include <QSvgRenderer>
 #include <QtMath>
 
 QLockButton::QLockButton(QWidget *parent)
@@ -18,19 +19,20 @@ QLockButton::QLockButton(QWidget *parent)
 
   mTimer.setInterval(DEF_TIMEOUT);
   mFillTimer.setInterval(DEF_UPDATE_TIMEOUT);
+
   connect(&mTimer, &QTimer::timeout, this, &QLockButton::onTimerTimeout);
   connect(&mFillTimer, &QTimer::timeout, this,
           &QLockButton::onFillTimerTimeout);
 
-  mLockGlyph = new QImage(":/images/lock.svg");
-  mUnlockGlyph = new QImage(":/images/unlock.svg");
+  mLockRenderer = new QSvgRenderer(QString(":/images/lock.svg"));
+  mUnlockRenderer = new QSvgRenderer(QString(":/images/unlock.svg"));
 
   setFillGradient();
 }
 
 QLockButton::~QLockButton() {
-  delete mLockGlyph;
-  delete mUnlockGlyph;
+  delete mLockRenderer;
+  delete mUnlockRenderer;
 }
 
 QString QLockButton::ModeToString(Mode mode) {
@@ -329,11 +331,11 @@ int QLockButton::fillAngle() {
 }
 
 void QLockButton::setFillGradient() {
-    mFillGradient.setCenter(mFrame.center());
+  mFillGradient.setCenter(mFrame.center());
 
-    mFillGradient.setAngle(90);
-    mFillGradient.setColorAt(1, mFillStartColor);
-    mFillGradient.setColorAt(0, mFillEndColor);
+  mFillGradient.setAngle(90);
+  mFillGradient.setColorAt(1, mFillStartColor);
+  mFillGradient.setColorAt(0, mFillEndColor);
 }
 
 void QLockButton::changeStatus() {
@@ -392,11 +394,11 @@ QRectF QLockButton::getFillFrame() {
 }
 
 void QLockButton::drawLockGlyph(QPainter &painter) {
-  painter.drawImage(mGlyphFrame, *mLockGlyph);
+  mLockRenderer->render(&painter, mGlyphFrame);
 }
 
 void QLockButton::drawUnlockGlyph(QPainter &painter) {
-  painter.drawImage(mGlyphFrame, *mUnlockGlyph);
+  mUnlockRenderer->render(&painter, mGlyphFrame);
 }
 
 void QLockButton::drawFill(QPainter &painter) {
