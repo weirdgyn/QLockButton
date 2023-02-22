@@ -1,0 +1,37 @@
+name: compile-qt5-plugin
+run-name: ${{ github.actor }} Build and Release LockButton plugin (Linux + Qt 5.9.5)
+on:
+  push:
+    paths:
+      - 'qlockbutton/qlockbutton.*'
+jobs:
+  build-and-release:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+            version: '5.9.5'
+            host: 'linux'
+            target: 'desktop'
+            dir: '${{ github.workspace }}/'
+      - name: Build #1
+        run: qmake LockButton.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
+      - name: Build #2
+        run: make -f Makefile qmake_all
+      - name: Build #3
+        run: make -j8
+      - name: Archive plugin
+        uses: actions/upload-artifact@v3
+        with:
+          name: qt6-plugin
+          path: |
+              liblockbuttonplugin.so
+              README.md
+              LICENSE.md
+              Changelog.txt
+              docs/latex/refman.pdf
+              qlockbutton/qlockbutton.h
+              qlockbutton/qlockbutton.cpp
+              qlockbutton/qlockbutton.pri
