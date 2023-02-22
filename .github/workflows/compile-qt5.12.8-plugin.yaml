@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'qlockbutton/qlockbutton.*'
-      - '.github/workflows/compile-qt5-plugin.*'
+      - '.github/workflows/compile-qt5.12.8-plugin.*'
 jobs:
   build-and-release:
     runs-on: ubuntu-20.04
