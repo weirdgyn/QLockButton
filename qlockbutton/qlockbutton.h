@@ -54,7 +54,10 @@ public:
   /**
    * @brief LockButton function Mode.
    */
-  enum class Mode { SingleShot = 0, MultiShot };
+  enum class Mode { 
+    SingleShot = 0, /**< Only one successful status switch allowed */ 
+    MultiShot       /**< Unlimited number of status switch allowed */
+  };
   Q_ENUM(Mode)
 
   /**
@@ -76,7 +79,10 @@ public:
   /**
    * @brief LockButton status.
    */
-  enum class Status { Unlocked = 0, Locked };
+  enum class Status { 
+    Unlocked = 0, /**< Unlocked */ 
+    Locked        /**< Locked */
+  };
   Q_ENUM(Status)
 
   /**
@@ -100,12 +106,14 @@ public:
   * @brief lockTimeout property getter.
   * 
   * @return int lockTimeout value.
+  * @see mLockTimeout
   */
   int lockTimeout() const;
   /**
    * @brief lockTimeout property setter.
    * 
    * @param lockTimeout new value 
+  * @see mLockTimeout
    */
   void setLockTimeout(int lockTimeout);
 
@@ -115,12 +123,14 @@ public:
    * @brief unlockTimeout property getter.
    * 
    * @return int unlockTimeout value
+   * @see mUnlockTimeout
    */
   int unlockTimeout() const;
   /**
    * @brief unlockTimeout property setter.
    * 
    * @param unlockTimeout new value
+   * @see mUnlockTimeout
    */
   void setUnlockTimeout(int unlockTimeout);
 
@@ -130,12 +140,14 @@ public:
    * @brief borderWidth property getter.
    * 
    * @return int borderWidth value
+   * @see mBorderWidth
    */
   int borderWidth() const;
   /**
    * @brief borderWidth property setter.
    * 
    * @param borderWidth new value
+   * @see mBorderWidth
    */
   void setBorderWidth(int borderWidth);
 
@@ -144,12 +156,14 @@ public:
    * @brief status property getter.
    * 
    * @return Status status value
+   * @see mStatus
    */
   Status status() const;
   /**
    * @brief status property setter.
    * 
    * @param status new value
+   * @see mStatus
    */
   void setStatus(Status status);
 
@@ -158,12 +172,14 @@ public:
    * @brief mode property getter.
    * 
    * @return Mode mode value
+   * @see Mode, mMode
    */
   Mode mode() const;
   /**
    * @brief mode property setter.
    * 
    * @param mode new value
+   * @see Mode, mMode
    */
   void setMode(Mode mode);
 
@@ -171,6 +187,7 @@ public:
    * @brief reset internal status.
    * 
    * Reset interal object status to allow further re-triggers (only when used in SingleShot mode)
+   * @see mTriggered
    */
   void reset();
 
@@ -180,12 +197,14 @@ public:
    * @brief innerColor property getter.
    * 
    * @return QColor innerColor value.
+   * @see mInnerColor
    */
   QColor innerColor() const;
   /**
    * @brief innerColor propery setter.
    * 
    * @param innerColor new value
+   * @see mInnerColor
    */
   void setInnerColor(const QColor &innerColor);
 
@@ -195,12 +214,14 @@ public:
    * @brief backgroundColor property getter.
    * 
    * @return QColor backgroundColor value
+   * @see mBackgroundColor
    */
   QColor backgroundColor() const;
   /**
    * @brief backgroundColor property setter.
    * 
    * @param backgroundColor new value
+   * @see mBackgroundColor
    */
   void setBackgroundColor(const QColor &backgroundColor);
 
@@ -210,12 +231,14 @@ public:
    * @brief borderColor property getter.
    * 
    * @return QColor borderColor value
+   * @see mBorderColor
    */
   QColor borderColor() const;
   /**
    * @brief borderColor property setter.
    * 
    * @param borderColor new value
+   * @see mBorderColor
    */
   void setBorderColor(const QColor &borderColor);
 
@@ -224,12 +247,14 @@ public:
    * @brief fillStartColor property getter.
    * 
    * @return QColor 
+   * @see mFillStartColor
    */
   QColor fillStartColor() const;
   /**
    * @brief fillStartColor property setter.
    * 
    * @param fillStartColor new value
+   * @see mFillStartColor
    */
   void setFillStartColor(const QColor &fillStartColor);
 
@@ -238,12 +263,14 @@ public:
    * @brief fillEndColor property getter.
    * 
    * @return QColor fillEndColor value
+   * @see mFillEndColor
    */
   QColor fillEndColor() const;
   /**
    * @brief fillEndColor property setter.
    * 
    * @param fillEndColor new value
+   * @see mFillEndColor
    */
   void setFillEndColor(const QColor &fillEndColor);
 
@@ -252,62 +279,63 @@ signals:
    * @brief signal successful change in status.
    * 
    * @param status reached status
+   * @see Status, mStatus
    */
   void success(QLockButton::Status status);
   /**
    * @brief signal unsuccessful attempt.
    * 
-   * @param remainingTime time missing to a successfull status change
+   * @param remainingTime time missing to a successfull status change (ms)
    */
   void fail(int remainingTime);
   /**
    * @brief signal change in lockTimeout property value.
-   * 
+   * @see mLockTimeout
    */
   void lockTimeoutChanged();
   /**
    * @brief signal change in unlockTimeout property value.
-   * 
+   * @see mUnlockTimeout
    */
   void unlockTimeoutChanged();
   /**
    * @brief signal change in borderWidth property value.
-   * 
+   * @see mBorderWidth
    */
   void borderWidthChanged();
   /**
    * @brief signal change in status property value.
-   * 
+   * @see mStatus, Status
    */
   void statusChanged();
   /**
    * @brief signal change in mode property value.
-   * 
+   * @see mMode
    */  
   void modeChanged();
   /**
    * @brief signal innerColor in mode property value.
-   * 
+   * @see mInnerColor
    */  
   void innerColorChanged();
   /**
    * @brief signal backgroundColor in mode property value.
-   * 
+   * @see mBackgroundColor
    */    
   void backgroundColorChanged();
   /**
    * @brief signal borderColor in mode property value.
-   * 
+   * @see mBorderColor
    */      
   void borderColorChanged();
   /**
    * @brief signal fillStartColor in mode property value.
-   * 
+   * @see mFillStartColor
    */    
   void fillStartColorChanged();
   /**
    * @brief signal fillEndColor in mode property value.
-   * 
+   * @see mFillEndColor
    */   
   void fillEndColorChanged();
 
@@ -319,6 +347,7 @@ protected:
    * Will update internal sub-areas size accordingly with defined ratios.
    * 
    * @param event Event descriptor
+   * @see resize()
    */
   void resizeEvent(QResizeEvent *event);
   /**
@@ -350,7 +379,7 @@ protected:
    */
   void mouseReleaseEvent(QMouseEvent *event);
   /**
-   * @brief override of base class mouseReleaseEvent
+   * @brief override of base class mouseMoveEvent
    * 
    * N/A
    * 
@@ -362,7 +391,7 @@ private slots:
   /**
    * @brief handle main timer timeout.
    * 
-   * The timeout evaluate a successfull status change.
+   * This timeout evaluate a successfull status change.
    * 
    */
   void onTimerTimeout();
@@ -506,25 +535,29 @@ private:
   /**
    * @brief Evaluate internal widget frame.
    * 
-   * @return QRectF 
+   * @return QRectF
+   * @see mFrame 
    */
   QRectF getFrame();
   /**
    * @brief Evaluate inner frame.
    * 
-   * @return QRectF 
+   * @return QRectF
+   * @see mInnerFrame 
    */
   QRectF getInnerFrame();
   /**
    * @brief Evaluate glyph frame.
    * 
    * @return QRectF 
+   * @see mGlyphFrame 
    */
   QRectF getGlyphFrame();
   /**
    * @brief Evaluate fill frame.
    * 
    * @return QRectF 
+   * @see mFillFrame 
    */
   QRectF getFillFrame();
 
@@ -540,7 +573,7 @@ private:
    * 
    * Switch the value of the status (based on the current status).
    * The funciton is called from internal methods on successfull state changes.
-   * 
+   * @see resizeEvent
    */
   void changeStatus();
   /**
