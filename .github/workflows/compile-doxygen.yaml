@@ -5,7 +5,7 @@ on:
     paths:
       - 'qlockbutton/qlockbutton.*'
       - 'Doxyfile'
-      - '.github/compile-doxygen.yaml'
+      - '.github/workflows/compile-doxygen.*'
 jobs:
   build-and-release:
     runs-on: ubuntu-20.04
