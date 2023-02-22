@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'qlockbutton/qlockbutton.*'
+      - '.github/workflows/compile-plugin.*'
 jobs:
   build-and-release:
     runs-on: ubuntu-20.04
@@ -15,6 +16,7 @@ jobs:
             version: '6.4.0'
             host: 'linux'
             target: 'desktop'
+            modules: 'qtmultimedia'
             dir: '${{ github.workspace }}/'
       - name: Build #1
         run: qmake LockButton.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
