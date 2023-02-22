@@ -64,7 +64,7 @@ public:
    * @brief Convert argument into a readable string.
    * 
    * @param mode 
-   * @return QString 
+   * @return QString readable mode string
    */
   QString static ModeToString(Mode mode);
 
@@ -89,7 +89,7 @@ public:
    * @brief Convert argument into a readable string.
    * 
    * @param status 
-   * @return QString 
+   * @return QString readable status string
    */
   QString static StatusToString(Status status);
   /**
